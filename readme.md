@@ -24,9 +24,9 @@ Customers have to enter in their cart totals manually.
  - NodeJS
  - MongoDB
 
-## Installation
+# Installation
 
-### Create Private Shopify App
+## Create Private Shopify App
  - Navigate to `https://YOUR-STORE.myshopify.com/admin/apps/private/new`
  - Give it a name
  - In the **Admin API** section click **Review disabled Admin API permissions**
@@ -35,12 +35,12 @@ Customers have to enter in their cart totals manually.
  - Click the **Save** button
  - You will need the API Key and Password values later on
 
-### Setting Up the Server
+## Set Up the Server
 `git clone git@github.com:Vindexus/nano-shopify`
 `cd nano-shopify`
 `npm install`
 
-### Fill Out Config
+## Fill Out Config
 Copy the contents of `config.example.json` to a new file named `config.json`. Fill out the following details:
 
 `port`: Port to run the server on. Ex `4800`
@@ -55,8 +55,10 @@ Copy the contents of `config.example.json` to a new file named `config.json`. Fi
 >aud, brl, cad, chf, clp, cny, czk, dkk, eur, gbp, hkd, huf, idr, ils, inr, jpy, krw, mxn, myr, nok, nzd, php, pkr, pln, rub, sek, sgd, thb, try, usd, twd, zar
 >```
 
+## Run the Server
+Start your server with `npm start`
 
-### Add Custom Payment Method
+## Add Custom Payment Method
 Navigate to `https://YOUR-STORE.myshopify.com/admin/settings/payments`  
 Scroll to **Manual payments**  
 Select **Create custom payment method** from the dropdown  
@@ -73,3 +75,7 @@ In **Additional details** modify and paste the following:
 
 5) Apply that discount here
 ```
+
+# Customization
+You can modify the CSS in `views/pay.pug`  
+You can modify the header and footer in the `views/partials/` folder
