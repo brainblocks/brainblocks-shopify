@@ -16,7 +16,7 @@ If you find this useful you can donate Nano to this address:
 2. You add a custom payment option that tells customers to go to that website
 3. Customer enters their total cart amount on that site
 4. Customer pays with Nano
-5. Customer is given a Shopify discount code that gives them 100% their order
+5. Customer is given a Shopify discount code that gives them 100% off their order
 5. Customer returns to your shop and finishes their checkout
 
 ## Warnings and Caveats
