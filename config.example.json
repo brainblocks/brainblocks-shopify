@@ -1,1 +1,12 @@
-{}
+{
+  "mongodbURI": "mongodb://localhost/nano-shopify",
+  "port": "4800",
+  "shopify": {
+    "endpoint": "https://YOUR-STORE.myshopify.com/admin",
+    "username": "",
+    "password": ""
+  },
+  "currency": "usd",
+  "pageTitle": "Your Store",
+  "nanoDestination": "xrb_"
+}
