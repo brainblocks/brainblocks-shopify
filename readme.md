@@ -19,7 +19,8 @@ If you find this useful you can donate Nano to this address:
 5. Customer is given a Shopify discount code that gives them 100% their order
 5. Customer returns to your shop and finishes their checkout
 
-## Caveats and Warnings
+## Warnings and Caveats
+Disthonest customers **can avoid paying taxes** by putting in their subtotal instead of their total. They'll get a code that will reduce their subtotal to 0, which will cause Shopify to calculate the taxes as 0.
 Customers have to go to an external site to pay.  
 Because Shopify does not allow HTML in custom payment instructions, customers will have to copy and paste the URL.  
 Customers have to enter in their cart totals manually.
