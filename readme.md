@@ -1,5 +1,5 @@
 # Nano Shopify
-A NodeJS project for accepting [Nano](https://nano.org) cryptocurrency on your Shopify store.
+An unofficial NodeJS project for accepting [Nano](https://nano.org) cryptocurrency on your Shopify store.
 
 Powered by [BrainBlocks](https://brainblocks.io).
 
