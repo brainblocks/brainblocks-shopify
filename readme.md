@@ -3,6 +3,10 @@ An unofficial NodeJS project for accepting [Nano](https://nano.org) cryptocurren
 
 Powered by [BrainBlocks](https://brainblocks.io).
 
+
+### Screenshots
+[See screenshots of it in action](https://github.com/Vindexus/nano-shopify/blob/master/screenshots.md).
+
 ## Donate
 If you find this useful you can donate Nano to this address:  
 `xrb_3myw9br787znt1cfyj3dqmnynrat9b9m9w3en75cj5anwyy1dqbft3py8ef3`
