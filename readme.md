@@ -41,8 +41,8 @@ If you find this useful you can donate Nano to this address:
  - You will need the API Key and Password values later on
 
 ## Set Up the Server
-`git clone git@github.com:Vindexus/nano-shopify`
-`cd nano-shopify`
+`git clone git@github.com:Vindexus/nano-shopify`  
+`cd nano-shopify`  
 `npm install`
 
 ## Fill Out Config
