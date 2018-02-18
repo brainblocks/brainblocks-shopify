@@ -1,0 +1,25 @@
+{
+  "name": "brainblocks-shopify-server",
+  "version": "1.0.0",
+  "description": "Creates Shopify discount codes to enable paying with BrainBlocks.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/Vindexus/brainblocks-shopify-server"
+  },
+  "author": "Colin \"Vindexus\" Kierans",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.6.0",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongoose": "^5.0.6",
+    "pug": "^2.0.0-rc.4",
+    "shortid32": "^0.1.1",
+    "superagent": "^3.8.2"
+  }
+}
