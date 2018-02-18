@@ -48,7 +48,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('/pay', (req, res) => {
+app.get('/', (req, res) => {
   res.render('pay', {
     destination: NANO_DESTINATION,
     currency: CURRENCY,
