@@ -47,12 +47,12 @@ Customers have to enter in their cart totals manually.
 ## Fill Out Config
 Copy the contents of `config.example.json` to a new file named `config.json`. Fill out the following details:
 
-`port`: Port to run the server on. Ex `4800`
-`mongodbURI`: The connection URI for mongoose to connect to. Ex: `mongodb://localhost/nano-shopify`
+`port`: Port to run the server on. Ex `4800`  
+`mongodbURI`: The connection URI for mongoose to connect to. Ex: `mongodb://localhost/nano-shopify`  
 `shopify.endpoint`: Ex: `https://your-store.myshopify.com/admin`  
 `shopify.username`: Use the **API Key** of your private Shopify app  
 `shopify.password`: Use the **Password** of your private Shopify app  
-`destination`: The Nano address to send payment to
+`destination`: The Nano address to send payment to  
 `currency`: The currency of your shop. Lowercase. Accepted values are the same as BrainBlocks:
 
 >```
@@ -62,7 +62,7 @@ Copy the contents of `config.example.json` to a new file named `config.json`. Fi
 ## Run the Server
 Start your server with `npm start`
 
-## Add Custom Payment Method
+## Add Custom Payment Method in Shopify
 Navigate to `https://YOUR-STORE.myshopify.com/admin/settings/payments`  
 Scroll to **Manual payments**  
 Select **Create custom payment method** from the dropdown  
