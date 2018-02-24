@@ -6,6 +6,7 @@ const async         = require('async')
 
 const Code = require('./models/code')
 const shopify = require('./lib/shopify')
+const brainblocks = require('./lib/brainblocks')
 const die = require('./lib/die')
 const currencies = require('./lib/currencies')
 const config = require('./config.json')
@@ -57,6 +58,60 @@ app.get('/', (req, res) => {
   })
 })
 
+app.get('/orders', (req, res) => {
+  shopify.getOrders((err, orders) => {
+    res.send(orders)
+  })
+})
+
+app.get('/order/:shopifyToken', (req, res) => {
+  shopify.getOrderByToken(req.params.shopifyToken, (err, order) => {
+    if (err) {
+      return res.status(500).send({
+        error: err.toString()
+      })
+    }
+    res.send(shopify.sanitizeOrder(order))
+  })
+})
+
+app.post('/order/:shopifyToken/confirm/:brainblocksToken', (req, res) => {
+  async.waterfall([(next) => {
+    shopify.getOrderByToken(req.params.shopifyToken, (err, order) => {
+      if (err) {
+        return next(err)
+      }
+
+      next(null, order)
+    })
+  }, (order, next) => {
+    brainblocks.confirmPayment(req.params.shopifyToken, order.total_price, config.currency, (err, confirmed) => {
+      if (err) {
+        return next(err)
+      }
+      if (confirmed) {
+        next(null, order)
+      }
+    })
+  }, (order, next) => {
+    shopify.updateToPaid(order.id, order.total_price, (err) => {
+      if (err) {
+        return next(err)
+      }
+
+      return next(null)
+    })
+  }], (err) => {
+    console.log('err',err);
+    if (err) {
+      return res.status(500).send({
+        error: err.toString()
+      })
+    }
+    res.status(200).send({confirmed: true})
+  })
+})
+
 app.post('/create-code', (req, res) => {
   function sendCode (code) {
     return res.status(200).send(code)
@@ -65,7 +120,6 @@ app.post('/create-code', (req, res) => {
   async.waterfall([(next) => {
     //If we've already created a code for this token we return that one
     Code.findOne({brainblocksToken: req.body.token}, (err, code) => {
-      console.log('code',code);
       if (err) {
         return next(err)
       }
@@ -81,14 +135,9 @@ app.post('/create-code', (req, res) => {
     request.get('https://brainblocks.io/api/session/' + req.body.token + '/verify')
       .then((response) => {
         let bbData = JSON.parse(response.text)
-        console.log('bbData', bbData);
 
         let errors = []
 
-        console.log('typeof(bbData.amount)',typeof(bbData.amount));
-        console.log('typeof(req.body.amount)',typeof(req.body.amount));
-        console.log('bbData.amount',bbData.amount);
-        console.log('req.body.amount',req.body.amount);
 
         const bodyAmount = req.body.amount.toString()
 
@@ -141,6 +190,6 @@ app.post('/create-code', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log('Example app listening on port ' + port + '!')
+  console.log('Listening on port ' + port + '!')
 })
 
