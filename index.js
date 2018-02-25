@@ -84,7 +84,6 @@ app.post('/order/:shopifyToken/confirm/:brainblocksToken', (req, res) => {
         return next(err)
       }
 
-      console.log('order.financial_status',order.financial_status);
       next(null, order)
     })
   }, (order, next) => {
