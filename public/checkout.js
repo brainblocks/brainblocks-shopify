@@ -118,11 +118,6 @@ function nanoShopify (opts) {
 
     var styles = document.createElement('style')
     styles.innerHTML = `
-.nano-shopify-confirmed {
-  color: green;
-}
-#nano-shopify-shopify-container {
-}
 .nano-shopify-loading-container {
   display: none;
   text-align: center;
