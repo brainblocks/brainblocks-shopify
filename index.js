@@ -53,6 +53,7 @@ function shopifyMiddleware (req, res, next) {
       return next(new Error('No registered shop found with that shopKey'))
     }
 
+    req.shop = shop
     req.shopify = new Shopify(shop.endpoint, shop.username, shop.password)
     next(null)
   })
@@ -147,7 +148,7 @@ app.get('/:shopKey/order/:shopifyToken', shopifyMiddleware, (req, res) => {
 app.post('/:shopKey/order/:shopifyToken/confirm/:brainblocksToken', shopifyMiddleware, (req, res) => {
   async.waterfall([(next) => {
     //Fetch order from Shopify based on token
-    shopify.getOrderByToken(req.params.shopifyToken, (err, order) => {
+    req.shopify.getOrderByToken(req.params.shopifyToken, (err, order) => {
       if (err) {
         return next(err)
       }
@@ -156,7 +157,7 @@ app.post('/:shopKey/order/:shopifyToken/confirm/:brainblocksToken', shopifyMiddl
     })
   }, (order, next) => {
     //Confirm that the brainblocks payment amount matches the order amount
-    brainblocks.confirmPayment(req.params.brainblocksToken, order.total_price, config.currency, (err, confirmed) => {
+    brainblocks.confirmPayment(req.params.brainblocksToken, order.total_price, req.shop.currency, (err, confirmed) => {
       if (err) {
         return next(err)
       }
@@ -166,7 +167,7 @@ app.post('/:shopKey/order/:shopifyToken/confirm/:brainblocksToken', shopifyMiddl
     })
   }, (order, next) => {
     //Mark the order as paid in Shopify
-    shopify.updateToPaid(order.id, order.total_price, (err) => {
+    req.shopify.updateToPaid(order.id, order.total_price, (err) => {
       if (err) {
         return next(err)
       }
