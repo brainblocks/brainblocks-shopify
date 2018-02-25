@@ -35,16 +35,13 @@ function nanoShopify (opts) {
   //Get the order information based on token
   this.getOrder = function (done) {
     var url = opts.endpoint + '/' + opts.key + '/order/' + shopifyToken
-    console.log('url',url);
     $.ajax({
       url: url,
       dataType: 'json',
       success: function (order) {
-        console.log('order',order);
         done(null, order)
       }.bind(this),
       error: function (xhr) {
-        console.log('xhr',xhr);
         this.showXHRErrors(xhr)
       }.bind(this)
     });
@@ -91,7 +88,6 @@ function nanoShopify (opts) {
       return
     }
 
-    console.log('do');
     if (!window.brainblocks) {
       return this.loadScript('https://brainblocks.io/brainblocks.min.js', function () {
         this.start()
@@ -149,10 +145,7 @@ function nanoShopify (opts) {
     thanksEl.classList.toggle('nano-shopify-loading', true)
     thanksTitleEl.innerHTML = 'Loading...'
 
-    console.log('get order');
     this.getOrder(function (err, order) {
-      console.log('err',err);
-      console.log('order',order);
       thanksEl.classList.toggle('nano-shopify-loading', false)
       if (err) {
         return this.showErrors(err)
