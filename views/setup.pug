@@ -1,0 +1,12 @@
+extends layout
+block content
+  textarea(rows="10").
+    &lt;script type="text/javascript" src="#{src}"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+    var nano = new nanoShopify({
+      currency: '#{currency}',
+      endpoint: '#{endpoint}',
+      destination: '#{destination}'
+    })
+    nano.start()
+    &lt;/script&gt;

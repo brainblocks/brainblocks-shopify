@@ -26,18 +26,25 @@ function nanoShopify (opts) {
 
   this.showXHRErrors = function (xhr) {
     var body = xhr.responseJSON
+    if (!body || !body.error) {
+      return this.showErrors(xhr.statusText)
+    }
     this.showErrors(body.error)
   }
 
   //Get the order information based on token
   this.getOrder = function (done) {
+    var url = opts.endpoint + '/' + opts.key + '/order/' + shopifyToken
+    console.log('url',url);
     $.ajax({
-      url: opts.endpoint + '/order/' + shopifyToken,
+      url: url,
       dataType: 'json',
       success: function (order) {
+        console.log('order',order);
         done(null, order)
       }.bind(this),
       error: function (xhr) {
+        console.log('xhr',xhr);
         this.showXHRErrors(xhr)
       }.bind(this)
     });
@@ -50,7 +57,7 @@ function nanoShopify (opts) {
     var brainblocksToken = data.token
     $.ajax({
       method: 'POST',
-      url: opts.endpoint + '/order/' + shopifyToken + '/confirm/' + brainblocksToken,
+      url: opts.endpoint + '/' + opts.key + '/order/' + shopifyToken + '/confirm/' + brainblocksToken,
       dataType: 'json',
       success: function (json) {
         thanksEl.classList.toggle('nano-shopify-loading', false)
@@ -84,6 +91,7 @@ function nanoShopify (opts) {
       return
     }
 
+    console.log('do');
     if (!window.brainblocks) {
       return this.loadScript('https://brainblocks.io/brainblocks.min.js', function () {
         this.start()
@@ -141,7 +149,10 @@ function nanoShopify (opts) {
     thanksEl.classList.toggle('nano-shopify-loading', true)
     thanksTitleEl.innerHTML = 'Loading...'
 
+    console.log('get order');
     this.getOrder(function (err, order) {
+      console.log('err',err);
+      console.log('order',order);
       thanksEl.classList.toggle('nano-shopify-loading', false)
       if (err) {
         return this.showErrors(err)

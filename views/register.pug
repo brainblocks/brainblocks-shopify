@@ -1,0 +1,118 @@
+extends layout
+block content
+  script(src="/register.js" type="text/javascript")
+
+  .col-md-8.offset-md-2
+    .card
+      .card-header
+        h2 BrainBlocks on Shopify
+      .card-body
+        .progress.mb-2
+          .progress-bar(style="width: 25%") Step 1/4
+
+        .alert.alert-danger.mb-2(role="errors" style="display: none;")
+
+        .step.step-1(data-step="1")
+          h4 1. Enter Your Shop URL
+          form(role="enter-url")
+            .form-group
+              label.form-label Shop URL
+              input.form-control(name="shopUrl")
+              small.help-text Ex: https://my-shop.myshopify.com
+            .form-group
+              button.btn.btn-primary
+                | Next
+                span.fas.fa-chevron-right.ml-2
+
+        .step.step-2(data-step="2")
+          button.btn.btn-outline-secondary.float-right.btn-sm(role="back" type="button")
+            i.fas.fa-chevron-left.mr-2
+            | Back
+
+          h4 2. Create a Private App
+          p  Create a private app in your Shopify admin area. 
+
+          a.btn.btn-outline-primary.mb-2(role="create-private-app" target="_blank")
+            | Create App
+            span.fas.fa-external-link-alt.ml-2
+
+          p Under <strong>Admin API</strong> set <strong>Orders, transactions and fulfillments</strong> to <strong>Read and write</strong>
+          p You will need the <strong>API Key</strong> and <strong>Password</strong> fields.
+
+          button.btn.btn-primary(role="done-step-2")
+            | Next
+            span.fas.fa-chevron-right.ml-2
+        .step.step-3(data-step="3")
+          button.btn.btn-outline-secondary.float-right.btn-sm(role="back" type="button")
+            i.fas.fa-chevron-left.mr-2
+            | Back
+
+          h4 3. Register
+          form(role="register")
+            .form-group
+              label.form-label Custom App API Key
+              input.form-control(name="apiKey")
+              small.help-text Copy and paste from your admin area
+
+            .form-group
+              label.form-label Custom App Password
+              input.form-control(name="password")
+              small.help-text Copy and paste from your admin area
+
+            .form-group
+              label.form-label Shop Currency
+              select.form-control(name="currency")
+                each cur in currencies
+                  if cur == 'USD'
+                    option(value=cur.toLowerCase() selected)= cur.toUpperCase()
+                  else
+                    option(value=cur.toLowerCase())= cur.toUpperCase()
+
+            .form-group
+              label.form-label Nano Destination
+              input.form-control(name="destination")
+              small.help-text Address payments are sent to. Ex: <code>xrb_14z4kpja5q1z7n5ukaafikk6cca384adia8utab8n3ar3patatxwd6ux8ghb</code>
+
+            .form-group
+              button.btn.btn-primary
+                | Register With BrainBlocks
+                span.fas.fa-chevron-right.ml-2
+
+        .step.step-4(data-step="4")
+          button.btn.btn-outline-secondary.float-right.btn-sm(role="back" type="button")
+            i.fas.fa-chevron-left.mr-2
+            | Back
+
+          h3 4. Add JavaScript to Thank You Page
+          p Add this code in <strong>Additional scripts</strong> in your checkout settings
+
+          textarea.form-control.mb-2(rows="13" role="code" id="code")
+
+          button.btn.btn-outline-primary.mr-2(role="cody-code")
+            | Copy Code
+            span.fas.fa-copy.ml-2
+
+          a.btn.btn-outline-primary.mr-2(role="go-to-checkout-settings" target="_blank")
+            | Go to Checkout Settings
+            span.fas.fa-external-link-alt.ml-2
+
+          button.btn.btn-primary(role="done-step-4")
+            | Next
+            span.fas.fa-chevron-right.ml-2
+
+        .step.step-5(data-step="5")
+          button.btn.btn-outline-secondary.float-right.btn-sm(role="back" type="button")
+            i.fas.fa-chevron-left.mr-2
+            | Back
+
+          h3 5. Add Custom Payment Information
+          a.btn.btn-outline-primary.mb-2(role="go-to-payment-settings" target="_blank")
+            | Go to Payment Settings
+            span.fas.fa-external-link-alt.ml-2
+
+          ul.mb-2
+            li Select <strong>Create custom payment method</strong> under <strong>Manual payments</strong>.
+            li Under <strong>Name of the custom payment method</strong> enter <code>Nano</code>
+            li Click <strong>Activate</strong>
+
+          p Then you're done!

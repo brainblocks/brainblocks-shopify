@@ -3,29 +3,21 @@ const express       = require('express')
 const bodyParser    = require('body-parser')
 const mongoose      = require('mongoose')
 const async         = require('async')
+const crypto        = require('crypto');
 
-const shopify = require('./lib/shopify')
+const Shopify = require('./lib/shopify')
 const brainblocks = require('./lib/brainblocks')
 const die = require('./lib/die')
 const currencies = require('./lib/currencies')
 const config = require('./config.json')
 const symbols = require('./lib/symbols')
+const Shop = require('./models/shop')
 
 const MONGODB_URI = config.mongodbURI
 
 if (!MONGODB_URI) {
   die('MONGODB_URI not set in config')
 }
-
-const NANO_DESTINATION = config.nanoDestination;
-console.log('NANO_DESTINATION', NANO_DESTINATION);
-
-if (!NANO_DESTINATION) {
-  die('NANO_DESTINATION not set in config.')
-}
-
-const CURRENCY = config.currency || 'usd'
-const SYMBOL = config.symbol || symbols[CURRENCY.toUpperCase()] || '$'
 
 mongoose.Promise = global.Promise;
 mongoose.connect(MONGODB_URI);
@@ -44,10 +36,32 @@ function sendError (res, err) {
   })
 }
 
+//Gets a shopify API thing based on given :shopKey param
+function shopifyMiddleware (req, res, next) {
+  if (!req.params.shopKey) {
+    next(new Error('Shop key missing'))
+  }
+
+  Shop.findOne({
+    key: req.params.shopKey
+  }, (err, shop) => {
+    if (err) {
+      return next(err)
+    }
+
+    if (!shop) {
+      return next(new Error('No registered shop found with that shopKey'))
+    }
+
+    req.shopify = new Shopify(shop.endpoint, shop.username, shop.password)
+    next(null)
+  })
+}
+
 app.use(express.static('public'))
 app.use(bodyParser.json())
-app.engine('html', require('ejs').renderFile);
-
+//app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'pug')
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -56,27 +70,81 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', (req, res) => {
-  const endpoint = 'https://' + req.get('host')
-  res.render('setup.html', {
-    destination: NANO_DESTINATION,
-    currency: CURRENCY,
-    endpoint: endpoint,
-    src: endpoint + '/checkout.js'
+  res.render('register', {
+    currencies: currencies
   })
 })
 
+app.post('/register', (req, res) => {
+  const endpoint = req.body.shopUrl + '/admin'
+  const shopify = new Shopify(endpoint, req.body.apiKey, req.body.password)
+
+  let errors = []
+
+  if (!req.body.apiKey) {
+    errors.push('API Key is required')
+  }
+  if (!req.body.password) {
+    errors.push('Password is required')
+  }
+  if (!req.body.currency) {
+    errors.push('Currency is required')
+  }
+  if (!req.body.shopUrl) {
+    errors.push('Shop URL is required')
+  }
+  if (!req.body.destination) {
+    errors.push('Destination is required')
+  }
+  else if (req.body.destination.substr(0, 4) != 'xrb_') {
+    errors.push('Destination does not look correct')
+  }
+
+  if (errors.length) {
+    return sendError(res, errors)
+  }
+
+  shopify.getOrders((err, orders) => {
+    if (err) {
+      return sendError(res, new Error('Error connecting to Shopify. Double check shop url, API key, and password.'))
+    }
+
+    const key = crypto.createHash('md5').update(endpoint + '_' + new Date().getTime()).digest("hex");
+
+    Shop.create({
+      key: key,
+      endpoint: endpoint,
+      username: req.body.apiKey,
+      password: req.body.password,
+      destination: req.body.destination,
+      currency: req.body.currency
+    }, (err, shop) => {
+      if (err) {
+        return sendError(res, err)
+      }
+
+      res.send({
+        endpoint: endpoint, //Endpoint of this app
+        currency: shop.currency,
+        key: shop.key,
+        src: 'https://' + req.get('host') + '/checkout.js',
+        destination: shop.destination
+      }).status(200)
+    })
+  })
+})
 
 //Get info of an order from its token
-app.get('/order/:shopifyToken', (req, res) => {
-  shopify.getOrderByToken(req.params.shopifyToken, (err, order) => {
+app.get('/:shopKey/order/:shopifyToken', shopifyMiddleware, (req, res) => {
+  req.shopify.getOrderByToken(req.params.shopifyToken, (err, order) => {
     if (err) {
       return sendError(res, err)
     }
-    res.send(shopify.sanitizeOrder(order))
+    res.send(req.shopify.sanitizeOrder(order))
   })
 })
 
-app.post('/order/:shopifyToken/confirm/:brainblocksToken', (req, res) => {
+app.post('/:shopKey/order/:shopifyToken/confirm/:brainblocksToken', shopifyMiddleware, (req, res) => {
   async.waterfall([(next) => {
     //Fetch order from Shopify based on token
     shopify.getOrderByToken(req.params.shopifyToken, (err, order) => {
