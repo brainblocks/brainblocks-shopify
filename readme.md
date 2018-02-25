@@ -3,30 +3,21 @@ An unofficial NodeJS project for accepting [Nano](https://nano.org) cryptocurren
 
 Powered by [BrainBlocks](https://brainblocks.io).
 
-
-### Screenshots
-[See screenshots of it in action](https://github.com/Vindexus/nano-shopify/blob/master/screenshots.md).
-
 ## Donate
 If you find this useful you can donate Nano to this address:  
 `xrb_3myw9br787znt1cfyj3dqmnynrat9b9m9w3en75cj5anwyy1dqbft3py8ef3`
 
 ## How It Works
-1. You launch this project on a new website
-2. You add a custom payment option that tells customers to go to that website
-3. Customer enters their total cart amount on that site
-4. Customer pays with Nano
-5. Customer is given a Shopify discount code that gives them 100% their order
-5. Customer returns to your shop and finishes their checkout
+1. You launch this project on a server
+2. Add a Custom payment method called "Nano"
+3. Embed a JS script on the Thank you page
+4. Customers select that method
+5. Customers pay with Nano on the thank you page
+6. Order is marked as paid
 
-## Caveats and Warnings
-Customers have to go to an external site to pay.  
-Because Shopify does not allow HTML in custom payment instructions, customers will have to copy and paste the URL.  
-Customers have to enter in their cart totals manually.
 
 ## Requirements
  - NodeJS
- - MongoDB
 
 # Installation
 
@@ -34,7 +25,7 @@ Customers have to enter in their cart totals manually.
  - Navigate to `https://YOUR-STORE.myshopify.com/admin/apps/private/new`
  - Give it a name
  - In the **Admin API** section click **Review disabled Admin API permissions**
- - Set **Price rules** to "Read and Write"
+ - Set **Price rules** and **Orders, transactions and fulfillments** to "Read and Write"
  - Set all other rules to "No access"
  - Click the **Save** button
  - You will need the API Key and Password values later on
@@ -67,19 +58,11 @@ Navigate to `https://YOUR-STORE.myshopify.com/admin/settings/payments`
 Scroll to **Manual payments**  
 Select **Create custom payment method** from the dropdown  
 In **Name of the custom payment method** name put "Nano"  
-In **Additional details** modify and paste the following: 
-```
-1) Go here: URL_WHERE_YOU_ARE_RUNNING_THIS_APP
+Save
 
-2) Enter in your total amount, including taxes and shipping
-
-3) Pay with Nano
-
-4) Copy the provided discount code from that page
-
-5) Apply that discount here
-```
-
-# Customization
-You can modify the CSS in `views/pay.pug`  
-You can modify the header and footer in the `views/partials/` folder
+## Add Nano Shopify JS Script
+Navigate to where you are running this project  
+Copy the provided JavaScript  
+Navigate to `https://YOUR-STORE.myshopify.com/admin/settings/checkout`  
+Paste the code into *Additional scripts* under **Order processing**
+Save

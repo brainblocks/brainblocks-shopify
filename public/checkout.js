@@ -15,14 +15,15 @@ function nanoShopify (opts) {
 
   this.showErrors = function (errs) {
     errs = typeof(errs) == 'string' ? [errs] : errs
-    brainblocksContainer.innerHTML('<div class="alert alert-danger">' + errs.join('<br />') + '</div>')
+    brainblocksContainer.innerHTML = '<div class="alert alert-danger">' + errs.join('<br />') + '</div>'
   }
 
   this.showXHRErrors = function (xhr) {
-    var body = JSON.parse(xhr.reponseText)
+    var body = xhr.responseJSON
     this.showErrors(body.error)
   }
 
+  //Get the order information based on token
   this.getOrder = function (done) {
     $.ajax({
       url: opts.endpoint + '/order/' + shopifyToken,
@@ -36,6 +37,7 @@ function nanoShopify (opts) {
     });
   }
 
+  //Confirm the nano payment, which will also mark it paid
   this.confirmPayment = function (data) {
     var brainblocksToken = data.token
     $.ajax({
@@ -55,19 +57,21 @@ function nanoShopify (opts) {
 
   }
 
-  this.createButton = function () {
+  this.start = function () {
+    console.log('START');
     if (!window.brainblocks) {
       return this.loadScript('https://brainblocks.io/brainblocks.min.js', function () {
-        this.createButton(opts)
+        this.start(opts)
       }.bind(this))
     }
 
     if (!window.$) {
       return this.loadScript('https://code.jquery.com/jquery-3.3.1.min.js', function () {
-        this.createButton(opts)
+        this.start(opts)
       }.bind(this))
     }
 
+    console.log('starting');
     thanksEl = document.querySelector('.os-step__special-description')
     thanksTitleEl = document.querySelector('.os-step__title')
     brainblocksContainer = document.createElement('div')
@@ -79,9 +83,12 @@ function nanoShopify (opts) {
     var parts = window.location.pathname.split('/')
     shopifyToken = parts[3]
 
+    thanksEl.classList.toggle('loading', true)
     thanksTitleEl.innerHTML = 'Loading...'
 
     this.getOrder(function (err, order) {
+      console.log('order',order);
+      thanksEl.classList.toggle('loading', false)
       if (err) {
         return this.showErrors(err)
       }
@@ -114,6 +121,10 @@ function nanoShopify (opts) {
       else if(order.financial_status == 'paid') {
         thanksTitleEl.innerHTML = 'Nano received'
         brainblocksContainer.innerHTML = '<div class="brainblocks-confirmed">Nano payment received.</div>'
+      }
+      else {
+        thanksTitleEl.innerHTML = 'Status: ' + order.financial_status
+        brainblocksContainer.innerHTML = '<div class="">Contact support</div>'
       }
     }.bind(this))
 

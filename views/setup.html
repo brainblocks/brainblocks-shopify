@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <title>Nano Shopify Setup</title>
+    <style type="text/css">
+      body {
+        font-family: sans-serif;
+        padding: 50px 0
+      }
+
+      textarea {
+        padding: 1em;
+        background: #eee;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+<h2>Put this in your additional scripts</h2>
+<textarea rows="10">
+&lt;script type="text/javascript" src="<%= src %>"&gt;&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+var nano = new nanoShopify({
+  currency: '<%= currency %>',
+  endpoint: '<%= endpoint %>',
+  destination: '<%= destination %>'
+})
+nano.start()
+&lt;/script&gt;
+</textarea></body>
+</html>
