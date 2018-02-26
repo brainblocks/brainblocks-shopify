@@ -2,12 +2,6 @@ $(document).ready(function () {
   var shopUrl = ''
   var numSteps = $('.step').length
 
-  //TESTING ONLY
-  $('[name=shopUrl]').val('https://vindexus-nano-dev-store.myshopify.com')
-  $('[name=apiKey]').val('98bdbfe0a021fc24703d97356601566c')
-  $('[name=destination]').val('xrb_14z4kpjm5q1z7n5uk5jfikk6cxk384wdiz8ut5b8n57r3patutxwf6ux8ghb')
-  $('[name=password]').val('b763a70e363f5e55b755ed53324a009f')
-
   $('[name=shopUrl]').focus()
 
   function showStep (step) {
@@ -118,7 +112,7 @@ $(document).ready(function () {
 
         var html = `<script type="text/javascript" src="` + json.src + `"></script>
 <script type="text/javascript">
-var nano = new nanoShopify({
+var nano = new brainblocksShopify({
   currency: '` + json.currency + `',
   endpoint: '` + json.endpoint + `',
   key: '` + json.key + `',

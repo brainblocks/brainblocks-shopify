@@ -12,11 +12,16 @@ const currencies = require('./lib/currencies')
 const config = require('./config.json')
 const symbols = require('./lib/symbols')
 const Shop = require('./models/shop')
+const encryption = require('./lib/encrypt')
 
 const MONGODB_URI = config.mongodbURI
 
 if (!MONGODB_URI) {
   die('MONGODB_URI not set in config')
+}
+
+if (!process.env.ENCRYPTION_KEY || process.env.ENCRYPTION_KEY.length != 32) {
+  die('process.env.ENCRYPTION_KEY must be 32 characters long')
 }
 
 mongoose.Promise = global.Promise;
@@ -115,8 +120,8 @@ app.post('/register', (req, res) => {
     Shop.create({
       key: key,
       endpoint: endpoint,
-      username: req.body.apiKey,
-      password: req.body.password,
+      username: encryption.encrypt(req.body.apiKey),
+      password: encryption.encrypt(req.body.password),
       destination: req.body.destination,
       currency: req.body.currency
     }, (err, shop) => {

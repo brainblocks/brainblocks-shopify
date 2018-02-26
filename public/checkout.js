@@ -1,4 +1,4 @@
-function nanoShopify (opts) {
+function brainblocksShopify (opts) {
   opts = opts || {}
 
   var defaults = {
