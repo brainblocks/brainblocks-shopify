@@ -9,8 +9,8 @@ Powered by [BrainBlocks](https://brainblocks.io). Developed by Vindexus.
 
 # Installation
 ## Set Up the Server
-`git clone git@github.com:brainblocks/brainblocks-shopify`  
-`cd nano-shopify`  
+`git clone https://github.com/brainblocks/brainblocks-shopify.git`  
+`cd brainblocks-shopify`  
 `npm install`
 
 ## Fill Out Config
