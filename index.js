@@ -132,12 +132,11 @@ app.post('/register', (req, res) => {
         return sendError(res, err)
       }
 
-      const appUrl = 'https://' + req.get('host')
       res.send({
-        endpoint: appUrl, //Endpoint of this app
+        endpoint: config.appUrl, //Endpoint of this app
         currency: shop.currency,
         key: shop.key,
-        src: appUrl + '/checkout.js',
+        src: config.appUrl + '/checkout.js',
         destination: shop.destination
       }).status(200)
     })

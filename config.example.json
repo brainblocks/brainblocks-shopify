@@ -1,5 +1,6 @@
 {
   "mongodbURI": "mongodb://localhost/nano-shopify",
   "port": "4800",
-  "encryptionKey": "put 32 random characters in here"
+  "encryptionKey": "put 32 random characters in here",
+  "appUrl": "https://site-where-you-are-hosting-this.com"
 }

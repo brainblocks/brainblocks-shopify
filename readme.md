@@ -18,6 +18,7 @@ Copy the `config.example.json` file to a new a file called `config.json`. Edit t
 
 `port`: Port to run the server on. Ex `4800`  
 `mongodbURI`: The connection URI for mongoose to connect to. Ex: `mongodb://localhost/brainblocks-shopify`  
+`appUrl`: The full URL of where you are hosting this app.  
 `encryptionKey` A random 32 character string. This is used to encrypt/decrypt Shopify API credentials in the database. You can generate one [here](https://www.browserling.com/tools/random-string). This key should not change. If it does, all existing shops will need to re-register.
 
 ## Run the Server

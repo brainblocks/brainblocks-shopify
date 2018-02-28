@@ -32,10 +32,7 @@ $(document).ready(function () {
       shopUrl = parts[0]
     }
 
-    //Drop trailing slash
-    if (shopUrl.slice(-1) == '/') {
-      shopUrl = shopUrl.substr(0, shopUrl.length - 1)
-    }
+    shopUrl = shopUrl.split('.com')[0] + '.com' //Remove everything after .com
 
     $('[name=shopUrl]').val(shopUrl)
 
