@@ -31,6 +31,20 @@ $(document).ready(function () {
     hideErrors()
     shopUrl = $('[name=shopUrl]').val()
 
+    var parts = shopUrl.split('?')
+
+    //Drop any GET params
+    if(parts.length > 1) {
+      shopUrl = parts[0]
+    }
+
+    //Drop trailing slash
+    if (shopUrl.slice(-1) == '/') {
+      shopUrl = shopUrl.substr(0, shopUrl.length - 1)
+    }
+
+    $('[name=shopUrl]').val(shopUrl)
+
     if (shopUrl.indexOf('http') != 0) {
       showErrors('Invalid shop url')
       return
