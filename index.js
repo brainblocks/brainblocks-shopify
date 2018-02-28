@@ -37,7 +37,8 @@ const port = config.port || 4800
 
 function sendError (res, err) {
   return res.status(500).send({
-    error: err.toString()
+    error: err.toString(),
+    info: err
   })
 }
 
