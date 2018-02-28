@@ -68,6 +68,7 @@ function shopifyMiddleware (req, res, next) {
 app.use(express.static('public'))
 app.use(bodyParser.json())
 //app.engine('html', require('ejs').renderFile);
+app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
 
 app.use(function(req, res, next) {
