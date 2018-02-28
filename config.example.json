@@ -1,4 +1,5 @@
 {
   "mongodbURI": "mongodb://localhost/nano-shopify",
-  "port": "4800"
+  "port": "4800",
+  "encryptionKey": "put 32 random characters in here"
 }

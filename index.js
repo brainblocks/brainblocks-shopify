@@ -15,13 +15,14 @@ const Shop = require('./models/shop')
 const encryption = require('./lib/encrypt')
 
 const MONGODB_URI = config.mongodbURI
+config.encryptionKey = config.encryptionKey || ""
 
 if (!MONGODB_URI) {
   die('MONGODB_URI not set in config')
 }
 
-if (!process.env.ENCRYPTION_KEY || process.env.ENCRYPTION_KEY.length != 32) {
-  die('process.env.ENCRYPTION_KEY must be 32 characters long. Current value: "' + process.env.ENCRYPTION_KEY + '" len:' +  process.env.ENCRYPTION_KEY.length)
+if (!config.encryptionKey || config.encryptionKey.length != 32) {
+  die('encryptionKey in config must be 32 characters long. Current value: "' + config.encryptionKey + '" len:' +  config.encryptionKey.length)
 }
 
 mongoose.Promise = global.Promise;

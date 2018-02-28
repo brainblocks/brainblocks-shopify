@@ -100,10 +100,16 @@ function brainblocksShopify (opts) {
       }.bind(this))
     }
 
-    thanksEl = document.querySelector('.os-step__special-description')
-    thanksTitleEl = document.querySelector('.os-step__title')
+    thanksEl = document.querySelector('.os-step__special-description,.os-step__description')
+    thanksTitleEl = document.querySelector('.os-step__title,.os-step__title')
     brainblocksContainer = document.createElement('div')
     brainblocksContainer.setAttribute('id', 'nano-shopify-shopify-container')
+
+    //If no special instructions are provided by the store Shopify enters in their own
+    //we remove it here because it's confusing to have it next to the button
+    if (thanksEl.matches('.os-step__description')) {
+      thanksEl.innerHTML = '';
+    }
 
     brainblocksContainer.innerHTML = `
 <div class="nano-shopify-loading-container">
