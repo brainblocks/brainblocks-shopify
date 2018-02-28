@@ -1,4 +1,4 @@
 {
   "mongodbURI": "mongodb://localhost/nano-shopify",
-  "port": "4800",
+  "port": "4800"
 }
