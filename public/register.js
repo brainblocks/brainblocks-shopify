@@ -40,12 +40,12 @@ $(document).ready(function () {
     $('[name=shopUrl]').val(shopUrl)
 
     if (shopUrl.indexOf('http') != 0) {
-      showErrors('Invalid shop url')
+      showErrors('Invalid MyShopify url, missing http')
       return
     }
 
     if (shopUrl.indexOf('myshopify.com') == -1) {
-      showErrors('Make sure you use you my-shop.myshopify.com')
+      showErrors('Make sure you use your YOUR-SHOP.myshopify.com link')
       return
     }
 

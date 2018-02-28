@@ -21,7 +21,7 @@ if (!MONGODB_URI) {
 }
 
 if (!process.env.ENCRYPTION_KEY || process.env.ENCRYPTION_KEY.length != 32) {
-  die('process.env.ENCRYPTION_KEY must be 32 characters long')
+  die('process.env.ENCRYPTION_KEY must be 32 characters long. Current value: "' + process.env.ENCRYPTION_KEY + '" len:' +  process.env.ENCRYPTION_KEY.length)
 }
 
 mongoose.Promise = global.Promise;
