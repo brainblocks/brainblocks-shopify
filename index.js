@@ -15,13 +15,14 @@ const Shop = require('./models/shop')
 const encryption = require('./lib/encrypt')
 
 const MONGODB_URI = config.mongodbURI
+config.encryptionKey = config.encryptionKey || ""
 
 if (!MONGODB_URI) {
   die('MONGODB_URI not set in config')
 }
 
-if (!process.env.ENCRYPTION_KEY || process.env.ENCRYPTION_KEY.length != 32) {
-  die('process.env.ENCRYPTION_KEY must be 32 characters long. Current value: "' + process.env.ENCRYPTION_KEY + '" len:' +  process.env.ENCRYPTION_KEY.length)
+if (!config.encryptionKey || config.encryptionKey.length != 32) {
+  die('encryptionKey in config must be 32 characters long. Current value: "' + config.encryptionKey + '" len:' +  config.encryptionKey.length)
 }
 
 mongoose.Promise = global.Promise;
@@ -37,7 +38,8 @@ const port = config.port || 4800
 
 function sendError (res, err) {
   return res.status(500).send({
-    error: err.toString()
+    error: err.toString(),
+    info: err
   })
 }
 
@@ -67,6 +69,7 @@ function shopifyMiddleware (req, res, next) {
 app.use(express.static('public'))
 app.use(bodyParser.json())
 //app.engine('html', require('ejs').renderFile);
+app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
 
 app.use(function(req, res, next) {
@@ -129,12 +132,11 @@ app.post('/register', (req, res) => {
         return sendError(res, err)
       }
 
-      const appUrl = 'https://' + req.get('host')
       res.send({
-        endpoint: appUrl, //Endpoint of this app
+        endpoint: config.appUrl, //Endpoint of this app
         currency: shop.currency,
         key: shop.key,
-        src: appUrl + '/checkout.js',
+        src: config.appUrl + '/checkout.js',
         destination: shop.destination
       }).status(200)
     })
