@@ -163,7 +163,7 @@ app.post('/:shopKey/order/:shopifyToken/confirm/:brainblocksToken', shopifyMiddl
     })
   }, (order, next) => {
     //Confirm that the brainblocks payment amount matches the order amount
-    brainblocks.confirmPayment(req.params.brainblocksToken, order.total_price, req.shop.currency, (err, confirmed) => {
+    brainblocks.confirmPayment(req.params.brainblocksToken, order.total_price, req.shop.currency, req.shop.destination, (err, confirmed) => {
       if (err) {
         return next(err)
       }
