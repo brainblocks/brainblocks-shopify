@@ -160,6 +160,9 @@ function brainblocksShopify (opts) {
         var rendered = true
         try {
           brainblocks.Button.render({
+            style: {
+              expanded: true  
+            },
             payment: {
               destination: opts.destination,
               currency: currency,
