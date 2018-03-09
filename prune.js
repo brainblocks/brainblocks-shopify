@@ -30,7 +30,7 @@ let agg = [{
   $match: {
     status: 'pending',
     createdAt: {
-      $lt: new Date()
+      $lt: cutoff
     }
   }
 }, {
@@ -55,11 +55,11 @@ Order.aggregate(agg, (err, orders) => {
         return next(err)
       }
 
-      Order.update({orderId: order.orderId}, {$set: {status: 'closed'}}, next)
+      console.log('Pruned order ' + order.orderId + ' for ' + shop.endpoint)
+      Order.update({orderId: order.orderId}, {$set: {status: 'cancelled'}}, next)
     })
 
   }, () => {
     process.exit()
   })
-  
 })
