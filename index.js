@@ -1,4 +1,3 @@
-const request       = require('superagent')
 const express       = require('express')
 const bodyParser    = require('body-parser')
 const mongoose      = require('mongoose')
@@ -12,6 +11,8 @@ const currencies = require('./lib/currencies')
 const config = require('./config.json')
 const symbols = require('./lib/symbols')
 const Shop = require('./models/shop')
+const Order = require('./models/order')
+
 const encryption = require('./lib/encrypt')
 
 const MONGODB_URI = config.mongodbURI
@@ -31,7 +32,6 @@ mongoose.connection.on('error', (err) => {
   console.error(err);
   die('MongoDB connection error. Please make sure MongoDB is running at ' + MONGODB_URI)
 });
-
 
 const app = express()
 const port = config.port || 4800
@@ -150,6 +150,22 @@ app.get('/:shopKey/order/:shopifyToken', shopifyMiddleware, (req, res) => {
       return sendError(res, err)
     }
     res.send(req.shopify.sanitizeOrder(order))
+
+    Order.findOneAndUpdate({
+      orderId: order.id
+    }, {
+      $set: {
+        orderId: order.id,
+        orderToken: order.token,
+        orderCheckoutToken: order.checkout_token,
+        status: order.financial_status,
+        shopId: req.shop._id
+      }
+    }, {
+      upsert: true
+    }, () => {
+      //TODO: Put some logging in here
+    })
   })
 })
 
@@ -180,8 +196,16 @@ app.post('/:shopKey/order/:shopifyToken/confirm/:brainblocksToken', shopifyMiddl
         return next(err)
       }
 
-      return next(null)
+      return next(null, order)
     })
+  }, (order, next) => {
+    Order.findOneAndUpdate({
+      orderId: order.id
+    }, {
+      $set: {
+        status: 'paid'
+      }
+    }, next)
   }], (err) => {
     if (err) {
       return sendError(res, err)
