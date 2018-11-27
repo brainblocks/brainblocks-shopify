@@ -14,9 +14,19 @@ const orderSchema = new Schema({
     type: Number,
     index: true
   },
+  shopId: {
+    type: Schema.Types.ObjectId,
+    index: true
+  },
   brainblocksToken: {
     type: String,
     index: true
+  }, 
+  status: {
+    type: String,
+    allowNull: false,
+    index: true,
+    defaultValue: 'pending'
   }
 }, { timestamps: true });
 
